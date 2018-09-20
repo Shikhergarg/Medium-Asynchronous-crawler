@@ -10,11 +10,36 @@ const writer = csvWriter({
 writer.pipe(fs.createWriteStream('URLS.csv'), {
     flags: 'a'
 });
+const Sequelize = require('sequelize')
+
+const db = new Sequelize('nodejs', 'shikher', 'password', {
+    dialect: 'sqlite',
+    host: 'localhost',
+    
+    storage: './URLS.db',
+	logging: false
+})
+
+const URLS = db.define('URLS', {
+   
+    URL: {
+        type: Sequelize.STRING,
+        allowNull: true,
+    },
+    count: {
+        type: Sequelize.STRING,
+        allowNull: true,
+    }
+	
+})
+
 const MAX_WORKERS = 5;
 let URLmap = {};
 let linkqueue=[];
 let running = 0;
 
+
+db.sync().then(()=>console.log("data created")).catch((err)=>console.log("Database error"))
 linkqueue.push('https://medium.com/');
 
 function crawl() {
@@ -34,6 +59,10 @@ function crawl() {
                 if (arr[i] in URLmap === false && isURL(arr[i])) {
                     linkqueue.push(arr[i]);
                     writer.write([arr[i],0]);
+					URLS.create({
+						URL:arr[i],
+						count:0
+					})
                 }
             }
             while (linkqueue.length && running < MAX_WORKERS) {

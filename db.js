@@ -7,7 +7,7 @@ const db = new Sequelize('nodejs', 'shikher', 'password', {
     storage: './assignment.db'
 })
 
-const assign = db.define('URLS', {
+const URLS = db.define('URLS', {
    
     URL: {
         type: Sequelize.STRING,
@@ -26,5 +26,5 @@ db.sync().then(()=>console.log("data created")).catch((err)=>console.log("Databa
 
 
 module.exports={
-    assign
+    URLS
 }
