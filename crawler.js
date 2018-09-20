@@ -5,7 +5,7 @@ cheerio = require('cheerio'),
 csvWriter = require('csv-write-stream');
 
 const writer = csvWriter({
-    headers: ['link']
+    headers: ['link','count']
 });
 writer.pipe(fs.createWriteStream('URLS.csv'), {
     flags: 'a'
@@ -33,7 +33,7 @@ function crawl() {
             for (let i = 0; i < arr.length; i++) {
                 if (arr[i] in URLmap === false && isURL(arr[i])) {
                     linkqueue.push(arr[i]);
-                    writer.write([arr[i]]);
+                    writer.write([arr[i],0]);
                 }
             }
             while (linkqueue.length && running < MAX_WORKERS) {
