@@ -21,7 +21,7 @@ const URLS = db.define('URLS', {
         allowNull: true,
     },
     count: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         allowNull: true,
     }
 	
@@ -34,9 +34,11 @@ let running = 0;
 
 
 db.sync().then(()=>console.log("data created")).catch((err)=>console.log("Database error"))
-linkqueue.push('https://medium.com/');
-
+let url='https://medium.com/'
+linkqueue.push(url);
+URLmap[url]=true;
 function crawl() {
+	
     const url = linkqueue.shift();
     running++;
     request(url, (error, response, html) => {
@@ -51,12 +53,19 @@ function crawl() {
             
             for (let i = 0; i < arr.length; i++) {
                 if (arr[i] in URLmap === false && isURL(arr[i])) {
+					URLmap[arr[i]]=true;
                     linkqueue.push(arr[i]);
 					URLS.create({
 						URL:arr[i],
-						count:0
+						count:1
 					})
                 }
+				else
+				{
+					URLS.increment('count', { where: { URL: arr[i] }});
+				}
+					
+				
             }
             while (linkqueue.length && running < MAX_WORKERS) {
                 crawl();
