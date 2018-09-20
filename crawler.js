@@ -53,8 +53,23 @@ function crawl() {
             
             for (let i = 0; i < arr.length; i++) {
                 if (arr[i] in URLmap === false && isURL(arr[i])) {
+					var linkwithoutparam=arr[i].split("?")
 					URLmap[arr[i]]=true;
                     linkqueue.push(arr[i]);
+					URLS.findOne({ where: {URL: arr[i]} }).then(obj => {
+						if(obj==null)
+						{
+							URLS.create({
+								URL:linkwithoutparam[0],
+								count:1
+							})
+						}
+						else
+						{
+							URLS.increment('count', { where: { URL: arr[i] }});
+						}
+  
+					})
 					URLS.create({
 						URL:arr[i],
 						count:1
