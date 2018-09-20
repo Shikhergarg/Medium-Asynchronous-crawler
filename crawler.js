@@ -1,15 +1,9 @@
 const request = require('request'),
 async = require('async'),
 fs = require('fs'),
-cheerio = require('cheerio'),
-csvWriter = require('csv-write-stream');
+cheerio = require('cheerio');
 
-const writer = csvWriter({
-    headers: ['link','count']
-});
-writer.pipe(fs.createWriteStream('URLS.csv'), {
-    flags: 'a'
-});
+
 const Sequelize = require('sequelize')
 
 const db = new Sequelize('nodejs', 'shikher', 'password', {
@@ -58,7 +52,6 @@ function crawl() {
             for (let i = 0; i < arr.length; i++) {
                 if (arr[i] in URLmap === false && isURL(arr[i])) {
                     linkqueue.push(arr[i]);
-                    writer.write([arr[i],0]);
 					URLS.create({
 						URL:arr[i],
 						count:0
