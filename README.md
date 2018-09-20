@@ -19,22 +19,12 @@ SQLITE
 Make sure you have Node.js and docker installed
 Running using docker
 ```
-git clone
-cd Microservices-Imagecompression-JsonPatch
-cd auth_service
-docker build -t shikhergarg/authservice .
+docker build -t shikhergarg/crawler .
 docker images
-docker run -p 3000:3000 -d shikhergarg/authservice
-cd ..
-cd image_service
-docker build -t shikhergarg/imageservice .
-docker images
-docker run -p 8000:8000 -d shikhergarg/imageservice
-cd ..
-cd patch_service
-docker build -t shikhergarg/patchservice .
-docker images
-docker run -p 8080:8080 -d shikhergarg/patchservice
+docker run -p 3000:3000 -d shikhergarg/crawler
+docker ps (To check process)
+docker cp <Container name>:URLS.db URLS.db (To copy URLS.db file from container to Host)
+
 ```
 Running without docker
 ```
