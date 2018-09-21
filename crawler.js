@@ -2,8 +2,6 @@ const request = require('request'),
 async = require('async'),
 fs = require('fs'),
 cheerio = require('cheerio');
-
-
 const Sequelize = require('sequelize')
 
 const db = new Sequelize('nodejs', 'shikher', 'password', {
@@ -13,7 +11,6 @@ const db = new Sequelize('nodejs', 'shikher', 'password', {
     storage: './URLS.db',
 	logging: false
 })
-
 const URLS = db.define('URLS', {
    
     URL: {
@@ -52,11 +49,13 @@ function crawl() {
 
             
             for (let i = 0; i < arr.length; i++) {
+				
+				
                 if (arr[i] in URLmap === false && isURL(arr[i])) {
 					var linkwithoutparam=arr[i].split("?")
 					URLmap[arr[i]]=true;
                     linkqueue.push(arr[i]);
-					URLS.findOne({ where: {URL: arr[i]} }).then(obj => {
+					URLS.findOne({ where: {URL: linkwithoutparam[0]} }).then(obj => {
 						if(obj==null)
 						{
 							URLS.create({
@@ -66,21 +65,16 @@ function crawl() {
 						}
 						else
 						{
-							URLS.increment('count', { where: { URL: arr[i] }});
+							URLS.increment('count', { where: { URL: linkwithoutparam[0] }});
 						}
   
 					})
-					URLS.create({
-						URL:arr[i],
-						count:1
-					})
                 }
-				else
+				else if(isURL(arr[i]))
 				{
-					URLS.increment('count', { where: { URL: arr[i] }});
+					var linkwithoutparam=arr[i].split("?");
+					URLS.increment('count', { where: { URL: linkwithoutparam[0] }});
 				}
-					
-				
             }
             while (linkqueue.length && running < MAX_WORKERS) {
                 crawl();
