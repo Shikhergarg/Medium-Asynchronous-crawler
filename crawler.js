@@ -1,5 +1,4 @@
 const request = require('request'),
-async = require('async'),
 fs = require('fs'),
 cheerio = require('cheerio');
 
@@ -13,29 +12,6 @@ db.once('open', function ()
 	//app.emit("app_started");
 });
 
-// const Sequelize = require('sequelize')
-
-// const db = new Sequelize('nodejs', 'shikher', 'password', {
-    // dialect: 'sqlite',
-    // host: 'localhost',
-    
-    // storage: './URLS.db',
-	// logging: false
-// })
-
-
-// const URLS = db.define('URLS', {
-   
-    // URL: {
-        // type: Sequelize.STRING,
-        // allowNull: true,
-    // },
-    // count: {
-        // type: Sequelize.INTEGER,
-        // allowNull: true,
-    // }
-	
-// })
 const URLSchema=mongoose.Schema({
 	URL:{
 		type:String,
@@ -57,7 +33,6 @@ let linkqueue=[];
 let running = 0;
 
 
-// db.sync().then(()=>console.log("data created")).catch((err)=>console.log("Database error"))
 let url='https://medium.com/'
 linkqueue.push(url);
 URLmap[url]=true;
@@ -125,10 +100,7 @@ function crawl() {
 								
 								
 							}).catch((err)=>{
-								//console.log("-----------------------",obj,err)
 							})
-							//URLS.update({URL: linkwithoutparam[0]},{$inc : {"count" : 1} }})
-							//URLS.increment('count', { where: { URL: linkwithoutparam[0] }});
 						}
   
 					})
