@@ -54,22 +54,24 @@ function crawl() {
 				
 				
                 if (arr[i] in URLmap === false && isURL(arr[i])) {
-					var linkwithoutparam=arr[i].split("?")
 					URLmap[arr[i]]=true;
-                    linkqueue.push(arr[i]);
+					linkqueue.push(arr[i]);
+					var linkwithoutparam=arr[i].split("?")
 					
 					URLS.find({URL: linkwithoutparam[0]}).then(obj => {
 						
 						//console.log("fasfasdf",obj);
 						if(obj.length>0)
 						{
-							var paramlist=linkwithoutparam[1].split("&")
-							for(var j=0;j<paramlist.length;j++)
-							{
-								var finparam=paramlist[j].split("=")
-								obj[0].param.push(finparam[0]);
-							}
-							//obj[0].param.push()
+							if(linkwithoutparam[1]!=undefined)
+							{	
+								var paramlist=linkwithoutparam[1].split("&")
+								for(var j=0;j<paramlist.length;j++)
+								{
+									var finparam=paramlist[j].split("=")
+									obj[0].param.push(finparam[0]);
+								}
+							}//obj[0].param.push()
 							obj[0].count++;
 							obj[0].save((err,obj)=>{
 								// if(err)
@@ -86,17 +88,16 @@ function crawl() {
 								count:1,
 								param:[]
 							}).then((obj)=>{
-								var paramlist=linkwithoutparam[1].split("&")
-								for(var j=0;j<paramlist.length;j++)
+								if(linkwithoutparam[1]!=undefined)
 								{
-									var finparam=paramlist[j].split("=")
-									obj.param.push(finparam[0]);
+									var paramlist=linkwithoutparam[1].split("&")
+									for(var j=0;j<paramlist.length;j++)
+									{
+										var finparam=paramlist[j].split("=")
+										obj.param.push(finparam[0]);
+									}
+									obj[0].save((err,obj)=>{});
 								}
-								obj[0].save((err,obj)=>{
-								// if(err)
-									// console.log(err);
-								
-								});
 								
 								
 							}).catch((err)=>{
