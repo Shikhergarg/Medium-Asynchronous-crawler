@@ -9,7 +9,6 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function ()
 {
 	console.log("Connected correctly to server");
-	//app.emit("app_started");
 });
 
 const URLSchema=mongoose.Schema({
@@ -58,7 +57,7 @@ function crawl() {
 					linkqueue.push(arr[i]);
 					var linkwithoutparam=arr[i].split("?")
 					
-					await URLS.find({URL: linkwithoutparam[0]}).then(obj => {
+					await URLS.find({URL: linkwithoutparam[0]}).then(async obj => {
 						
 						//console.log("fasfasdf",obj);
 						if(obj.length>0)
@@ -69,11 +68,12 @@ function crawl() {
 								for(var j=0;j<paramlist.length;j++)
 								{
 									var finparam=paramlist[j].split("=")
-									obj[0].param.push(finparam[0]);
+									if(obj[0].param.indexOf(finparam[0])==-1)
+										obj[0].param.push(finparam[0]);
 								}
 							}//obj[0].param.push()
 							obj[0].count++;
-							obj[0].save((err,obj)=>{
+							await obj[0].save((err,obj)=>{
 								// if(err)
 									// console.log(err);
 								
@@ -83,7 +83,7 @@ function crawl() {
 						}
 						else
 						{
-							 URLS.create({
+							await URLS.create({
 								URL:linkwithoutparam[0],
 								count:1,
 								param:[]
@@ -94,7 +94,8 @@ function crawl() {
 									for(var j=0;j<paramlist.length;j++)
 									{
 										var finparam=paramlist[j].split("=")
-										obj.param.push(finparam[0]);
+										if(obj.param.indexOf(finparam[0])==-1)
+											obj.param.push(finparam[0]);
 									}
 									obj.save((err,obj)=>{});
 								}
