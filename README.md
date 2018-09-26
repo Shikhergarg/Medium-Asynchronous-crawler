@@ -28,13 +28,9 @@ docker ps (To check process)
 Running without docker
 ```
 npm install
-Add your Mongodb or Mlab database connection string in the sixth line of the crawler.js
 npm start
 ```
-Both options will generate a URLS.db.
-There are two coloumns in the database.
-1-URLS
-2-Count
+To access database from Mongo shell use this url "mongo ds115353.mlab.com:15353/rentomojo -u Shikher -p 123456s"
 
 
 
