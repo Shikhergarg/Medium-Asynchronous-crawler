@@ -23,13 +23,12 @@ docker build -t shikhergarg/crawler .
 docker images
 docker run -p 3000:3000 -d shikhergarg/crawler
 docker ps (To check process)
-docker cp <Container name>:URLS.db URLS.db (To copy URLS.db file from container to Host)
 
 ```
 Running without docker
 ```
 npm install
-Add your database connection string in the sixth line of the crawler.js
+Add your Mongodb or Mlab database connection string in the sixth line of the crawler.js
 npm start
 ```
 Both options will generate a URLS.db.
