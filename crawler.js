@@ -96,7 +96,7 @@ function crawl() {
 										var finparam=paramlist[j].split("=")
 										obj.param.push(finparam[0]);
 									}
-									obj[0].save((err,obj)=>{});
+									obj.save((err,obj)=>{});
 								}
 								
 								
