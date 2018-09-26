@@ -29,6 +29,7 @@ docker cp <Container name>:URLS.db URLS.db (To copy URLS.db file from container 
 Running without docker
 ```
 npm install
+Add your database connection string in the sixth line of the crawler.js
 npm start
 ```
 Both options will generate a URLS.db.
