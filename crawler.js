@@ -3,7 +3,7 @@ fs = require('fs'),
 cheerio = require('cheerio');
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://Shikher:123456s@ds151892.mlab.com:51892/socialcopsassignment');
+mongoose.connect('mongodb://Shikher:123456s@ds115353.mlab.com:15353/rentomojo');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function ()
@@ -40,7 +40,7 @@ function crawl() {
 	
     const url = linkqueue.shift();
     running++;
-    request(url, (error, response, html) => {
+    request(url, async (error, response, html) => {
         if (!error) {
             const $ = cheerio.load(html);
             let arr = [];
@@ -58,7 +58,7 @@ function crawl() {
 					linkqueue.push(arr[i]);
 					var linkwithoutparam=arr[i].split("?")
 					
-					URLS.find({URL: linkwithoutparam[0]}).then(obj => {
+					await URLS.find({URL: linkwithoutparam[0]}).then(obj => {
 						
 						//console.log("fasfasdf",obj);
 						if(obj.length>0)
@@ -83,7 +83,7 @@ function crawl() {
 						}
 						else
 						{
-							URLS.create({
+							 URLS.create({
 								URL:linkwithoutparam[0],
 								count:1,
 								param:[]
@@ -104,12 +104,12 @@ function crawl() {
 							})
 						}
   
-					})
+					});
                 }
 				else if(isURL(arr[i]))
 				{
 					var linkwithoutparam=arr[i].split("?");
-					URLS.update({URL: linkwithoutparam[0]},{$inc : {"count" : 1} });
+					await URLS.update({URL: linkwithoutparam[0]},{$inc : {"count" : 1} });
 					//URLS.increment('count', { where: { URL: linkwithoutparam[0] }});
 				}
             }
